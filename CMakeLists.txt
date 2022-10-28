@@ -5,13 +5,10 @@ include(CTest)
 enable_testing()
 
 include(cmake/common.cmake)
+include(cmake/conan.cmake)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-set(CONAN_TOOLCHAIN_FILE ${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
-
-if(EXISTS ${CONAN_TOOLCHAIN_FILE})
-    include(${CONAN_TOOLCHAIN_FILE})
-endif()
+setup_conan()
 
 add_subdirectory(loader)
 add_subdirectory(loader_app)

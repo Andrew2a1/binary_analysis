@@ -4,7 +4,7 @@ set(SOURCES
     src/Loader.cpp
 )
 
-find_package(fmt)
+find_package(fmt CONFIG REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE include ${fmt_INCLUDE_DIRS})
