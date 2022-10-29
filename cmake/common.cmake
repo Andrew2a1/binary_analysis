@@ -4,4 +4,5 @@ function(set_common_properties TARGET)
         CXX_STANDARD_REQUIRED TRUE
     )
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+    target_link_options(${PROJECT_NAME} PRIVATE $<$<CONFIG:RELEASE>:-s>)
 endfunction()
