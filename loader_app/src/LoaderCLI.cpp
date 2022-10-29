@@ -4,6 +4,8 @@
 #include <Symbol.h>
 #include <fmt/core.h>
 
+bool is_text_chr(char chr) { return chr > 31 && chr < 127; }
+
 LoaderCLI::LoaderCLI(const std::string &binary_name)
 {
     BFDLoader bfd_loader;
@@ -59,7 +61,7 @@ void LoaderCLI::show_section_data(const std::string &section_name) const
     {
         row_data += fmt::format("{:02x} ", raw_data[n]);
 
-        if (isalnum(raw_data[n]))
+        if (is_text_chr(raw_data[n]))
         {
             row_text += fmt::format("{:c}", raw_data[n]);
         }
@@ -75,6 +77,12 @@ void LoaderCLI::show_section_data(const std::string &section_name) const
             row_data.clear();
             row_text.clear();
         }
+    }
+
+    if (!row_data.empty())
+    {
+        row_count += 1;
+        contents.add_row({fmt::format("{:#016x}", section.vma + section.bytes.size() - BYTES_PER_ROW + 1), row_data, row_text});
     }
 
     format_table_single_header(contents, row_count);
