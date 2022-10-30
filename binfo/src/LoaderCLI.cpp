@@ -15,11 +15,10 @@ LoaderCLI::LoaderCLI(const std::string &binary_name)
 
 void LoaderCLI::format_table_single_header(tabulate::Table &table, int row_count) const
 {
-    table.format().border_top("").border_bottom("").border_left("|").border_right("|").corner("");
-    table[0].format().border_top("-").border_bottom("-").border_left("|").border_right("|").corner("+");
-
-    if (row_count > 1)
+    if (row_count > 2)
     {
+        table.format().border_top("").border_bottom("").border_left("|").border_right("|").corner("");
+        table[0].format().border_top("-").border_bottom("-").border_left("|").border_right("|").corner("+");
         table[1].format().border_top("-").border_bottom("-").border_left("|").border_right("|").corner("+");
         table[row_count - 1].format().border_top("").border_bottom("-").border_left("|").border_right("|").corner_bottom_left("+").corner_bottom_right("+");
     }
@@ -42,16 +41,15 @@ void LoaderCLI::show_sections() const
     std::cout << file_sections << std::endl;
 }
 
-void LoaderCLI::show_section_data(const std::string &section_name) const
+void LoaderCLI::show_section_data(const std::string &section_name, int data_bytes_per_row) const
 {
-    constexpr int BYTES_PER_ROW = 16;
     const Section &section = bin.get_section(section_name);
     const uint8_t *raw_data = section.bytes.data();
 
     std::string row_data;
     std::string row_text;
-    row_data.reserve(BYTES_PER_ROW * 3);
-    row_text.reserve(BYTES_PER_ROW);
+    row_data.reserve(data_bytes_per_row * 3);
+    row_text.reserve(data_bytes_per_row);
 
     tabulate::Table contents;
     contents.add_row({"Addr", "Bytes", "Text"});
@@ -70,10 +68,10 @@ void LoaderCLI::show_section_data(const std::string &section_name) const
             row_text += ".";
         }
 
-        if (n % BYTES_PER_ROW == BYTES_PER_ROW - 1)
+        if (n % data_bytes_per_row == data_bytes_per_row - 1)
         {
             row_count += 1;
-            contents.add_row({fmt::format("{:#016x}", section.vma + n - BYTES_PER_ROW + 1), row_data, row_text});
+            contents.add_row({fmt::format("{:#016x}", section.vma + n - data_bytes_per_row + 1), row_data, row_text});
             row_data.clear();
             row_text.clear();
         }
@@ -82,7 +80,7 @@ void LoaderCLI::show_section_data(const std::string &section_name) const
     if (!row_data.empty())
     {
         row_count += 1;
-        contents.add_row({fmt::format("{:#016x}", section.vma + section.bytes.size() - BYTES_PER_ROW + 1), row_data, row_text});
+        contents.add_row({fmt::format("{:#016x}", section.vma + section.bytes.size() - data_bytes_per_row + 1), row_data, row_text});
     }
 
     format_table_single_header(contents, row_count);

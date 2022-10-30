@@ -17,12 +17,18 @@ int main(int argc, char const *argv[])
     bool show_symbols = false;
     bool demangle = false;
 
+    int bytes_per_row = 16;
+
     CLI::App app("binfo (binary info) is a simple program for obtaining information about ELF or PE binary file.", "binfo");
     app.add_flag("-s,--sections", show_sections, "Show sections");
     app.add_flag("-S,--symbols", show_symbols, "Show symbols");
     app.add_flag("-d,--demangle", demangle, "Demangle symbols");
-    app.add_option("filename", input_filename, "Input filename")->required();
+    app.add_option("-b,--bytes_per_row", bytes_per_row, "Number of bytes per row for section data")->check(CLI::Range(1, 128));
+    app.add_option("filename", input_filename, "Input filename")->required()->check(CLI::ExistingFile);
     app.add_option("sections", section_names, "List of sections to show");
+
+    app.validate_optional_arguments();
+    app.validate_positionals();
 
     try
     {
@@ -49,7 +55,7 @@ int main(int argc, char const *argv[])
 
     for (const auto &section_name : section_names)
     {
-        loader_cli.show_section_data(section_name);
+        loader_cli.show_section_data(section_name, bytes_per_row);
         std::cout << std::endl;
     }
 
