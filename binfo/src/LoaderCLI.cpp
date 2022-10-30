@@ -127,10 +127,10 @@ void LoaderCLI::show_symbols(bool demangle) const
             symbol_name = demangle_symbol_name(symbol_name);
         }
 
-        symbols_table.add_row({fmt::format("{:#016x}", symbol.addr), symbol_type_name, symbol_bind_name, symbol_name});
+        auto &row = symbols_table.add_row({fmt::format("{:#016x}", symbol.addr), symbol_type_name, symbol_bind_name, symbol_name});
+        row[0][3].format().width(80);
     }
 
-    format_table_single_header(symbols_table, bin.symbols.size() + 1);
     fmt::print("Symbols:\n");
     std::cout << symbols_table << std::endl;
 }
