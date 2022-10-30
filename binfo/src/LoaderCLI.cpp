@@ -63,7 +63,7 @@ void LoaderCLI::show_section_data(const std::string &section_name) const
 
         if (is_text_chr(raw_data[n]))
         {
-            row_text += fmt::format("{:c}", raw_data[n]);
+            row_text += raw_data[n];
         }
         else
         {
