@@ -1,4 +1,4 @@
-project(loader_app C CXX)
+project(binfo C CXX)
 
 set(SOURCES
     src/Loader.cpp
