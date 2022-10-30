@@ -1,6 +1,7 @@
 [requires]
 fmt/9.1.0
 tabulate/1.4
+cli11/2.3.0
 
 [generators]
 CMakeDeps

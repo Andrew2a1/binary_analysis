@@ -90,7 +90,7 @@ void LoaderCLI::show_section_data(const std::string &section_name) const
     std::cout << contents << std::endl;
 }
 
-void LoaderCLI::show_symbols() const
+void LoaderCLI::show_symbols(bool demangle) const
 {
     if (bin.symbols.empty())
     {
@@ -120,7 +120,14 @@ void LoaderCLI::show_symbols() const
                 symbol_bind_name = "UNKNOWN";
                 break;
         }
-        symbols_table.add_row({fmt::format("{:#016x}", symbol.addr), symbol_type_name, symbol_bind_name, symbol.name});
+
+        std::string symbol_name = symbol.name;
+        if (demangle)
+        {
+            symbol_name = demangle_symbol_name(symbol_name);
+        }
+
+        symbols_table.add_row({fmt::format("{:#016x}", symbol.addr), symbol_type_name, symbol_bind_name, symbol_name});
     }
 
     format_table_single_header(symbols_table, bin.symbols.size() + 1);
