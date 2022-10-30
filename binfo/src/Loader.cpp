@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
     app.add_flag("-S,--symbols", show_symbols, "Show symbols");
     app.add_flag("-d,--demangle", demangle, "Demangle symbols");
     app.add_option("filename", input_filename, "Input filename")->required();
-    app.add_option("sections", section_names, "List of section names to show");
+    app.add_option("sections", section_names, "List of sections to show");
 
     try
     {
