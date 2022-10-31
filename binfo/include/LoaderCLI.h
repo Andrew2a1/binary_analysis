@@ -12,7 +12,8 @@ private:
     Binary bin;
 
 public:
-    LoaderCLI(const std::string &binary_name);
+    explicit LoaderCLI(const std::string &binary_name);
+
     void show_sections() const;
     void show_section_data(const std::string &section_name, int data_bytes_per_row = 16) const;
     void show_symbols(bool demangle = false) const;

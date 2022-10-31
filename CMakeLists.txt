@@ -12,6 +12,7 @@ setup_conan()
 
 add_subdirectory(loader)
 add_subdirectory(binfo)
+add_subdirectory(binject)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
