@@ -27,3 +27,9 @@ struct Symbol
 };
 
 std::string demangle_symbol_name(const std::string &name);
+
+namespace std
+{
+std::string to_string(SymbolType symbol_type);
+std::string to_string(SymbolBindType symbol_type);
+}  // namespace std

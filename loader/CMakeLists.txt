@@ -14,10 +14,6 @@ set(HEADERS
     include/BFDLoader.h
 )
 
-set(LOADERAPP
-    test/LoadSelf.cpp
-)
-
 find_package(LibBfd)
 
 add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})

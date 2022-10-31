@@ -10,7 +10,7 @@ LoaderCLI::LoaderCLI(const std::string &binary_name)
 {
     BFDLoader bfd_loader;
     bin = bfd_loader.load_binary(binary_name);
-    fmt::print("Loaded binary '{}' {}/{} ({} bits) entry@{:#016x}\n\n", bin.filename, bin.type_name, bin.arch_name, bin.bits, bin.entry);
+    fmt::print("Binary file: '{}' {}/{} ({} bits) entry@{:#016x}\n\n", bin.filename, bin.type_name, bin.arch_name, bin.bits, bin.entry);
 }
 
 void LoaderCLI::format_table_single_header(tabulate::Table &table, int row_count) const
@@ -58,15 +58,7 @@ void LoaderCLI::show_section_data(const std::string &section_name, int data_byte
     for (int n = 0; n < static_cast<int>(section.bytes.size()); ++n)
     {
         row_data += fmt::format("{:02x} ", raw_data[n]);
-
-        if (is_text_chr(raw_data[n]))
-        {
-            row_text += raw_data[n];
-        }
-        else
-        {
-            row_text += ".";
-        }
+        row_text += is_text_chr(raw_data[n]) ? raw_data[n] : '.';
 
         if (n % data_bytes_per_row == data_bytes_per_row - 1)
         {
@@ -101,31 +93,8 @@ void LoaderCLI::show_symbols(bool demangle) const
 
     for (const auto &symbol : bin.symbols)
     {
-        const std::string symbol_type_name = (symbol.type == SymbolType::Function) ? "FUNC" : "DATA";
-        std::string symbol_bind_name;
-        switch (symbol.bind)
-        {
-            case SymbolBindType::Local:
-                symbol_bind_name = "LOCAL";
-                break;
-            case SymbolBindType::Global:
-                symbol_bind_name = "GLOBAL";
-                break;
-            case SymbolBindType::Weak:
-                symbol_bind_name = "WEAK";
-                break;
-            default:
-                symbol_bind_name = "UNKNOWN";
-                break;
-        }
-
-        std::string symbol_name = symbol.name;
-        if (demangle)
-        {
-            symbol_name = demangle_symbol_name(symbol_name);
-        }
-
-        auto &row = symbols_table.add_row({fmt::format("{:#016x}", symbol.addr), symbol_type_name, symbol_bind_name, symbol_name});
+        const std::string symbol_name = demangle ? demangle_symbol_name(symbol_name) : symbol.name;
+        auto &row = symbols_table.add_row({fmt::format("{:#016x}", symbol.addr), std::to_string(symbol.type), std::to_string(symbol.bind), symbol_name});
         row[0][3].format().width(80);
     }
 

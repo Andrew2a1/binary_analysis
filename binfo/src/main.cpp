@@ -12,14 +12,13 @@ int main(int argc, char const *argv[])
 {
     std::string input_filename;
     std::vector<std::string> section_names;
+    int bytes_per_row = 16;
 
     bool show_sections = false;
     bool show_symbols = false;
     bool demangle = false;
 
-    int bytes_per_row = 16;
-
-    CLI::App app("binfo (binary info) is a simple program for obtaining information about ELF or PE binary file.", "binfo");
+    CLI::App app("binfo (binary info) is a program for obtaining information about ELF or PE binary file.", "binfo");
     app.add_flag("-s,--sections", show_sections, "Show sections");
     app.add_flag("-S,--symbols", show_symbols, "Show symbols");
     app.add_flag("-d,--demangle", demangle, "Demangle symbols");
@@ -39,24 +38,32 @@ int main(int argc, char const *argv[])
         return app.exit(e);
     }
 
-    LoaderCLI loader_cli(input_filename);
-
-    if (show_sections)
+    try
     {
-        loader_cli.show_sections();
-        std::cout << std::endl;
+        LoaderCLI loader_cli(input_filename);
+
+        if (show_sections)
+        {
+            loader_cli.show_sections();
+            std::cout << std::endl;
+        }
+
+        if (show_symbols)
+        {
+            loader_cli.show_symbols(demangle);
+            std::cout << std::endl;
+        }
+
+        for (const auto &section_name : section_names)
+        {
+            loader_cli.show_section_data(section_name, bytes_per_row);
+            std::cout << std::endl;
+        }
     }
-
-    if (show_symbols)
+    catch (const std::exception &e)
     {
-        loader_cli.show_symbols(demangle);
-        std::cout << std::endl;
-    }
-
-    for (const auto &section_name : section_names)
-    {
-        loader_cli.show_section_data(section_name, bytes_per_row);
-        std::cout << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

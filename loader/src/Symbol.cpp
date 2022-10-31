@@ -21,3 +21,32 @@ std::string demangle_symbol_name(const std::string &name)
 
     return name;
 }
+
+std::string std::to_string(SymbolType symbol_type)
+{
+    switch (symbol_type)
+    {
+        case SymbolType::Data:
+            return "DATA";
+        case SymbolType::Function:
+            return "FUNC";
+        case SymbolType::Unknown:
+        default:
+            return "UNKNOWN";
+    }
+}
+
+std::string std::to_string(SymbolBindType symbol_bind_type)
+{
+    switch (symbol_bind_type)
+    {
+        case SymbolBindType::Local:
+            return "LOCAL";
+        case SymbolBindType::Global:
+            return "GLOBAL";
+        case SymbolBindType::Weak:
+            return "WEAK";
+        default:
+            return "UNKNOWN";
+    }
+}
