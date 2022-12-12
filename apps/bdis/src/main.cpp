@@ -12,23 +12,23 @@ void disasm(const std::string &filename, const std::string &section)
 {
     BFDLoader loader;
     Binary executable = loader.load_binary(filename);
-    const auto &text_section = executable.get_section(section);
+    const auto &file_section = executable.get_section(section);
 
     CapstoneWrapper capstone;
-    const auto [instructions, number_of_instructions] = capstone.disasm(text_section.bytes.data(), text_section.bytes.size(), text_section.vma);
+    const auto [instructions, number_of_instructions] = capstone.disasm(file_section.bytes.data(), file_section.bytes.size(), file_section.vma);
 
     for (size_t i = 0; i < number_of_instructions; i++)
     {
         const auto &instr = instructions.get()[i];
         fmt::print("{:016x}: ", instr.address);
 
-        std::string data_line;
+        std::string bytes;
         for (size_t j = 0; j < instr.size; ++j)
         {
-            data_line += fmt::format("{:02x} ", instr.bytes[j]);
+            bytes += fmt::format("{:02x} ", instr.bytes[j]);
         }
 
-        fmt::print("{:48s} {} {}\n", data_line, instr.mnemonic, instr.op_str);
+        fmt::print("{:48s} {} {}\n", bytes, instr.mnemonic, instr.op_str);
     }
 }
 
