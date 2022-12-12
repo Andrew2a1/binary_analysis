@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-class Binary;
+struct Binary;
 
 enum class SectionType
 {

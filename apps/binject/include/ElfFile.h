@@ -14,8 +14,6 @@ private:
     const std::string filename;
     Elf *elf_file;
     int file_descriptor;
-
-    GElf_Ehdr ehdr;
     int bits;
 
 public:
@@ -23,8 +21,6 @@ public:
     ~ElfFile();
 
     ElfFile(ElfFile &&) = default;
-    ElfFile &operator=(ElfFile &&) = default;
-
     ElfFile(const ElfFile &) = delete;
     ElfFile &operator=(const ElfFile &) = delete;
 

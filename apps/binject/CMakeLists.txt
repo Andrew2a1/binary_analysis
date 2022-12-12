@@ -17,7 +17,7 @@ find_package(CLI11 CONFIG REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_include_directories(${PROJECT_NAME} PRIVATE include)
-target_link_libraries(${PROJECT_NAME} libelf::libelf CLI11::CLI11)
+target_link_libraries(${PROJECT_NAME} PRIVATE libelf::libelf CLI11::CLI11)
 set_common_properties(${PROJECT_NAME})
 
 add_test(NAME binject_test
