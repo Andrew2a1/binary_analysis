@@ -16,8 +16,6 @@ public:
     CapstoneWrapper();
     ~CapstoneWrapper();
 
-    std::pair<InsnPtr, size_t> disasm(const uint8_t *data, size_t data_size, uint64_t address, size_t count = 0) const;
-
     csh handle() const;
     std::string strerror() const;
     InsnPtr create_insn() const;
