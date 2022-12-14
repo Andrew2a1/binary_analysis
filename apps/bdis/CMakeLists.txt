@@ -3,10 +3,17 @@ project(bdis C CXX)
 set(SOURCES
     src/main.cpp
     src/CapstoneWrapper.cpp
+    src/DisasmUtils.cpp
+    src/LinearDisasm.cpp
+    src/RecursiveDisasm.cpp
 )
 
 set(HEADERS
     include/CapstoneWrapper.h
+    include/Disasm.h
+    include/DisasmUtils.h
+    include/LinearDisasm.h
+    include/RecursiveDisasm.h
 )
 
 find_package(fmt CONFIG REQUIRED)

@@ -4,43 +4,33 @@
 
 #include <CLI/CLI.hpp>
 #include <iostream>
+#include <map>
+#include <queue>
 #include <stdexcept>
 
 #include "CapstoneWrapper.h"
+#include "Disasm.h"
+#include "LinearDisasm.h"
+#include "RecursiveDisasm.h"
 
-void disasm(const std::string &filename, const std::string &section)
+std::unique_ptr<Disasm> create_disassembler(const CapstoneWrapper &capstone, bool recursive)
 {
-    BFDLoader loader;
-    Binary executable = loader.load_binary(filename);
-    const auto &file_section = executable.get_section(section);
-
-    CapstoneWrapper capstone;
-    const auto [instructions, number_of_instructions] = capstone.disasm(file_section.bytes.data(), file_section.bytes.size(), file_section.vma);
-
-    for (size_t i = 0; i < number_of_instructions; i++)
+    if (recursive)
     {
-        const auto &instr = instructions.get()[i];
-        fmt::print("{:016x}: ", instr.address);
-
-        std::string bytes;
-        for (size_t j = 0; j < instr.size; ++j)
-        {
-            bytes += fmt::format("{:02x} ", instr.bytes[j]);
-        }
-
-        fmt::print("{:48s} {} {}\n", bytes, instr.mnemonic, instr.op_str);
+        return std::unique_ptr<Disasm>(new RecursiveDisasm(capstone));
     }
+    return std::unique_ptr<Disasm>(new LinearDisasm(capstone));
 }
 
 int main(int argc, char *argv[])
 {
     std::filesystem::path input_filename;
-    std::string section = ".text";
+    std::string section_name = ".text";
     bool use_recursive = false;
 
     CLI::App app("bdis (binary disassembler) is a program for linear and recursive disassemble of an executable file.", "bdis");
     app.add_option("filename", input_filename, "Input executable to disassemble")->required()->check(CLI::ExistingFile);
-    app.add_option("section", section, "Section name to disassemble");
+    app.add_option("section", section_name, "Section name to disassemble");
     app.add_flag("-r,--recursive", use_recursive, "Use recursive mode of disassembler");
     app.validate_optional_arguments();
     app.validate_positionals();
@@ -56,7 +46,9 @@ int main(int argc, char *argv[])
 
     try
     {
-        disasm(input_filename, section);
+        CapstoneWrapper capstone;
+        const auto disasm = create_disassembler(capstone, use_recursive);
+        disasm->disasm(input_filename, section_name);
     }
     catch (const std::exception &e)
     {

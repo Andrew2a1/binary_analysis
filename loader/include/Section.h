@@ -21,4 +21,6 @@ struct Section
     uint64_t vma = 0;
     uint64_t size = 0;
     std::vector<uint8_t> bytes;
+
+    bool contains(uint64_t addr) const { return (addr >= vma) && (addr - vma < size); }
 };
