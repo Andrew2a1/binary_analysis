@@ -1,11 +1,15 @@
 #include "CapstoneWrapper.h"
 
 #include <functional>
+#include <map>
 #include <stdexcept>
 
-CapstoneWrapper::CapstoneWrapper()
+CapstoneWrapper::CapstoneWrapper(const BinaryArch &arch, int bits)
 {
-    if (cs_open(CS_ARCH_X86, CS_MODE_64, &capstone_handle) != CS_ERR_OK)
+    static const std::map<BinaryArch, cs_arch> bin_arch_capstone_arch = {{BinaryArch::X86, CS_ARCH_X86}};
+    static const std::map<int, cs_mode> bits_capstone_mode = {{16, CS_MODE_16}, {32, CS_MODE_32}, {64, CS_MODE_64}};
+
+    if (cs_open(bin_arch_capstone_arch.at(arch), bits_capstone_mode.at(bits), &capstone_handle) != CS_ERR_OK)
     {
         throw std::runtime_error("Failed to initialize Capstone");
     }

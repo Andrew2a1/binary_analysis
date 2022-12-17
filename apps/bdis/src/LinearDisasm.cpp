@@ -10,13 +10,9 @@
 #include "CapstoneWrapper.h"
 #include "DisasmUtils.h"
 
-void LinearDisasm::disasm(const std::string &filename, const std::string &section_name)
+void LinearDisasm::disasm(const Binary &binary, const std::string &section_name)
 {
-    BFDLoader loader;
-    Binary executable = loader.load_binary(filename);
-    const auto &file_section = executable.get_section(section_name);
-
-    CapstoneWrapper capstone;
+    const auto &file_section = binary.get_section(section_name);
     const auto [instructions, number_of_instructions] = disassemble_data_block(file_section.bytes.data(), file_section.bytes.size(), file_section.vma);
 
     for (size_t i = 0; i < number_of_instructions; i++)

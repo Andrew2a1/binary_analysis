@@ -9,21 +9,19 @@
 
 #include "DisasmUtils.h"
 
-void RecursiveDisasm::disasm(const std::string &filename, const std::string &section_name)
+void RecursiveDisasm::disasm(const Binary &binary, const std::string &section_name)
 {
-    BFDLoader loader;
-    Binary executable = loader.load_binary(filename);
-    const auto &section = executable.get_section(section_name);
+    const auto &section = binary.get_section(section_name);
 
     std::list<uint64_t> instr;
     std::map<uint64_t, bool> seen;
 
     cs_option(capstone_handle().handle(), CS_OPT_DETAIL, CS_OPT_ON);
 
-    if (section.contains(executable.entry))
+    if (section.contains(binary.entry))
     {
-        instr.push_back(executable.entry);
-        fmt::print("Entry point: {:016x}\n", executable.entry);
+        instr.push_back(binary.entry);
+        fmt::print("Entry point: {:016x}\n", binary.entry);
     }
 
     const auto current_instr = capstone_handle().create_insn();

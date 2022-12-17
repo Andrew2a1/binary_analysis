@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Binary.h>
 #include <capstone/capstone.h>
 
 #include <functional>
@@ -13,7 +14,7 @@ class CapstoneWrapper
     csh capstone_handle;
 
 public:
-    CapstoneWrapper();
+    explicit CapstoneWrapper(const BinaryArch &arch = BinaryArch::X86, int bits = 64);
     ~CapstoneWrapper();
 
     csh handle() const;

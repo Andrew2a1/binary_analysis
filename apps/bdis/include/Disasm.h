@@ -11,6 +11,6 @@ public:
     explicit Disasm(const CapstoneWrapper &capstone) : capstone(capstone) {}
     virtual ~Disasm() = default;
 
-    virtual void disasm(const std::string &filename, const std::string &section_name = ".text") = 0;
+    virtual void disasm(const Binary &binary, const std::string &section_name = ".text") = 0;
     const CapstoneWrapper &capstone_handle() const { return capstone; }
 };

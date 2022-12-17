@@ -46,9 +46,12 @@ int main(int argc, char *argv[])
 
     try
     {
-        CapstoneWrapper capstone;
+        BFDLoader loader;
+        Binary binary = loader.load_binary(input_filename);
+
+        CapstoneWrapper capstone(binary.arch, binary.bits);
         const auto disasm = create_disassembler(capstone, use_recursive);
-        disasm->disasm(input_filename, section_name);
+        disasm->disasm(binary, section_name);
     }
     catch (const std::exception &e)
     {
