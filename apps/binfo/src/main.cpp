@@ -59,6 +59,8 @@ int main(int argc, char const *argv[])
             loader_cli.show_section_data(section_name, bytes_per_row);
             std::cout << std::endl;
         }
+
+        std::locale::global(std::locale("C"));
     }
     catch (const std::exception &e)
     {
