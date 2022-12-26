@@ -19,8 +19,3 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 target_link_libraries(${PROJECT_NAME} PRIVATE libelf::libelf CLI11::CLI11)
 set_common_properties(${PROJECT_NAME})
-
-add_test(NAME binject_test
-    COMMAND bash "${CMAKE_CURRENT_LIST_DIR}/tests/test.sh"
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
