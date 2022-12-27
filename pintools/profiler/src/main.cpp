@@ -1,10 +1,9 @@
 #include <pin.H>
+#include <pinutils/utils.h>
 
 #include <cstdio>
 #include <map>
 #include <string>
-
-#define TO_AFUNPTR(f) (reinterpret_cast<AFUNPTR>(reinterpret_cast<uint64_t>(f)))
 
 KNOB<bool> ProfileCalls(KNOB_MODE_WRITEONCE, "pintool", "c", "0", "Profile function calls");
 KNOB<bool> ProfileSyscalls(KNOB_MODE_WRITEONCE, "pintool", "s", "0", "Profile syscalls");

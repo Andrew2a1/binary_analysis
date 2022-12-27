@@ -1,4 +1,4 @@
-project(pintools C CXX)
+project(unpacker C CXX)
 
 set(SOURCES
     src/main.cpp
@@ -12,4 +12,4 @@ add_pintool(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_link_libraries(${PROJECT_NAME} PRIVATE pinutils)
 set_common_properties(${PROJECT_NAME})
 
-add_test(NAME ${PROJECT_NAME}_test COMMAND ${PIN_EXE} -t ${CMAKE_BINARY_DIR}/lib/lib${PROJECT_NAME}.so -c -s -- /bin/true)
+add_test(NAME ${PROJECT_NAME}_test COMMAND ${PIN_EXE} -t ${CMAKE_BINARY_DIR}/lib/lib${PROJECT_NAME}.so -- /bin/true)
