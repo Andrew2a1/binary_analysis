@@ -5,10 +5,8 @@ include(CTest)
 enable_testing()
 
 include(cmake/common.cmake)
-include(cmake/conan.cmake)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-setup_conan()
 
 add_subdirectory(loader)
 add_subdirectory(pintools)

@@ -1,4 +1,4 @@
-project(pintools C CXX)
+project(profiler C CXX)
 
 set(SOURCES
     src/main.cpp
